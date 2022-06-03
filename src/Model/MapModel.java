@@ -88,7 +88,7 @@ public class MapModel {
             if(step == 0){ //시작점 따로 처리
                 this.map[curMapPosition.dy][curMapPosition.dx].cellState = 'T'; //take up 의미로 T를 시작점으로. S가 start, saw 두개기 때문에..
                 this.map[curMapPosition.dy][curMapPosition.dx].nextDirection = curMapString.charAt(2);
-                this.map[curMapPosition.dy][curMapPosition.dx].preDirection = curMapString.charAt(2);
+                this.map[curMapPosition.dy][curMapPosition.dx].preDirection = 'M';
                 this.map[curMapPosition.dy][curMapPosition.dx].index = step;
             }else{
                 this.map[curMapPosition.dy][curMapPosition.dx].cellState = curMapString.charAt(0);
