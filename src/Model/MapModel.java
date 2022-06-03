@@ -3,6 +3,7 @@ package Model;
 import java.io.*;
 
 class MapCell{
+    int index;
     char cellState;
     char preDirection;
     char nextDirection;
@@ -30,7 +31,8 @@ public class MapModel {
         BufferedReader br1 = new BufferedReader(new FileReader(f));
         //MARK: data로 경로 확인하고 startpoint 맞춰주기
         String curMapCell;
-        Position calculateMin = new Position(0, 0);
+        Position minPosition = new Position(0, 0);
+        Position tempPosition = new Position(0,0);
         for(int step = 0; (curMapCell = br1.readLine())!=null ; step++){
             char temp;
             if (curMapCell.charAt(0) == 'E'){
@@ -42,24 +44,28 @@ public class MapModel {
                     temp = curMapCell.charAt(4);
                 }
                 if(temp == 'U'){
-                    calculateMin.dy += 1;
+                    tempPosition.dy += 1;
                 } else if(temp == 'D'){
-                    calculateMin.dy -= 1;
+                    tempPosition.dy -= 1;
                 } else if (temp == 'L'){
-                    calculateMin.dx -= 1;
+                    tempPosition.dx -= 1;
                 } else if (temp == 'R'){
-                    calculateMin.dx += 1;
+                    tempPosition.dx += 1;
                 }else{
                     System.out.println("ERROR: invalid map data");
                 }
             }
+            //역대 가장 작은 x,y값을 저장
+            minPosition.dx = Math.min(tempPosition.dx, minPosition.dx);
+            minPosition.dy = Math.min(tempPosition.dy, minPosition.dy);
         }
         br1.close();
-        if(calculateMin.dx < 0) {
-            this.startPos.dx = this.startPos.dx - calculateMin.dx + 1;
+        //최소값이 음수가 나오면 그만큼 더해주기
+        if(minPosition.dx < 0) {
+            this.startPos.dx = this.startPos.dx - minPosition.dx + 1;
         }
-        if(calculateMin.dy < 0){
-            this.startPos.dy = this.startPos.dy - calculateMin.dy + 1;
+        if(minPosition.dy < 0){
+            this.startPos.dy = this.startPos.dy - minPosition.dy + 1;
         }
     }
 
@@ -67,20 +73,24 @@ public class MapModel {
         for (int i=0;i<100;i++){
             for(int j =0; j<100;j++){
                 map[i][j].cellState = 'X';
+                map[i][j].index = -1;
             }
         }
         BufferedReader br2 = new BufferedReader(new FileReader(f));
         Position curMapPosition = new Position(this.startPos.dy,this.startPos.dx);
         String curMapString;
-        for(int step = 1; (curMapString = br2.readLine())!=null ; step++){
+        for(int step = 0; (curMapString = br2.readLine())!=null ; step++){
 
-            if(step == 1){ //시작점 따로 처리
+            if(step == 0){ //시작점 따로 처리
                 this.map[curMapPosition.dy][curMapPosition.dx].cellState = 'T'; //take up 의미로 T를 시작점으로. S가 start, saw 두개기 때문에..
                 this.map[curMapPosition.dy][curMapPosition.dx].nextDirection = curMapString.charAt(2);
+                this.map[curMapPosition.dy][curMapPosition.dx].preDirection = curMapString.charAt(2);
+                this.map[curMapPosition.dy][curMapPosition.dx].index = step;
             }else{
                 this.map[curMapPosition.dy][curMapPosition.dx].cellState = curMapString.charAt(0);
                 this.map[curMapPosition.dy][curMapPosition.dx].preDirection = curMapString.charAt(2);
                 this.map[curMapPosition.dy][curMapPosition.dx].nextDirection = curMapString.charAt(4);
+                this.map[curMapPosition.dy][curMapPosition.dx].index = step;
             }
             char next = this.map[curMapPosition.dy][curMapPosition.dx].nextDirection
             if(next == 'U'){
@@ -140,6 +150,9 @@ public class MapModel {
         return realMap;
     }
 
+    public Position getStartPos(){
+        return startPos;
+    }
 
 
 }
