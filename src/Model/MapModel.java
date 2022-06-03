@@ -2,24 +2,22 @@ package Model;
 
 import java.io.*;
 
-class MapCell{
-    int index;
-    char cellState;
-    char preDirection;
-    char nextDirection;
-}
+
 
 public class MapModel {
     private File f;
     private int mapNum;
     private final String[] mapList = {"default.map", "another.map"};
-    //TODO: map 크기 제한이 있는지..
-    private MapCell[][] map = new MapCell[100][100];
+    private MapCell[][] map;
     private Position startPos = new Position(0, 0);
 
     private MapCell[][] realMap;
+    public int xCut = 100;
+    public int yCut = 100;
 
     public MapModel(int mapNum) throws IOException {
+        map = new MapCell[100][100];
+
         this.mapNum = mapNum;
         f = new File("./src/data/"+mapList[mapNum]);
         this.calculateMap();
@@ -36,7 +34,7 @@ public class MapModel {
         for(int step = 0; (curMapCell = br1.readLine())!=null ; step++){
             char temp;
             if (curMapCell.charAt(0) == 'E'){
-                System.out.println("맵의 시작점이 종점입니다.");
+                break;
             } else{
                 if(step == 0){ //시작점 따로 처리
                     temp = curMapCell.charAt(2);
@@ -44,9 +42,9 @@ public class MapModel {
                     temp = curMapCell.charAt(4);
                 }
                 if(temp == 'U'){
-                    tempPosition.dy += 1;
-                } else if(temp == 'D'){
                     tempPosition.dy -= 1;
+                } else if(temp == 'D'){
+                    tempPosition.dy += 1;
                 } else if (temp == 'L'){
                     tempPosition.dx -= 1;
                 } else if (temp == 'R'){
@@ -62,16 +60,19 @@ public class MapModel {
         br1.close();
         //최소값이 음수가 나오면 그만큼 더해주기
         if(minPosition.dx < 0) {
-            this.startPos.dx = this.startPos.dx - minPosition.dx + 1;
+            this.startPos.dx = this.startPos.dx - minPosition.dx ;
         }
         if(minPosition.dy < 0){
-            this.startPos.dy = this.startPos.dy - minPosition.dy + 1;
+            this.startPos.dy = this.startPos.dy - minPosition.dy ;
         }
     }
 
     private void readMap() throws IOException {
         for (int i=0;i<100;i++){
             for(int j =0; j<100;j++){
+                if(map[i][j] == null){
+                    map[i][j] = new MapCell();
+                }
                 map[i][j].cellState = 'X';
                 map[i][j].index = -1;
             }
@@ -80,7 +81,10 @@ public class MapModel {
         Position curMapPosition = new Position(this.startPos.dy,this.startPos.dx);
         String curMapString;
         for(int step = 0; (curMapString = br2.readLine())!=null ; step++){
-
+            if (curMapString.charAt(0) == 'E'){
+                this.map[curMapPosition.dy][curMapPosition.dx].cellState = curMapString.charAt(0);
+                break;
+            }
             if(step == 0){ //시작점 따로 처리
                 this.map[curMapPosition.dy][curMapPosition.dx].cellState = 'T'; //take up 의미로 T를 시작점으로. S가 start, saw 두개기 때문에..
                 this.map[curMapPosition.dy][curMapPosition.dx].nextDirection = curMapString.charAt(2);
@@ -92,11 +96,11 @@ public class MapModel {
                 this.map[curMapPosition.dy][curMapPosition.dx].nextDirection = curMapString.charAt(4);
                 this.map[curMapPosition.dy][curMapPosition.dx].index = step;
             }
-            char next = this.map[curMapPosition.dy][curMapPosition.dx].nextDirection
+            char next = this.map[curMapPosition.dy][curMapPosition.dx].nextDirection;
             if(next == 'U'){
-                curMapPosition.dy++;
-            } else if(next == 'D'){
                 curMapPosition.dy--;
+            } else if(next == 'D'){
+                curMapPosition.dy++;
             } else if (next == 'L'){
                 curMapPosition.dx--;
             } else if (next == 'R'){
@@ -114,36 +118,42 @@ public class MapModel {
 
         int xCount =0;
         int yCount =0;
-        int xCut=100;
-        int yCut=100;
 
         for(int i=0; i < 100 ; i++){
             for(int j=0; j<100; j++){
-                if(map[i][j].cellState == 'X') xCount++;
-            }
-            if (xCount == 100){
-                xCut = i;
-                break;
-            }
-        }
-        for(int i=0; i < 100 ; i++){
-            for(int j=0; j<100; j++){
-                if(map[j][i].cellState == 'X') yCount++;
+                if(map[i][j].cellState == 'X') yCount++;
             }
             if (yCount == 100){
                 yCut = i;
                 break;
             }
+            yCount = 0;
         }
-        yCut--;
-        xCut--;
+        for(int i=0; i < 100 ; i++){
+            for(int j=0; j<100; j++){
+                if(map[j][i].cellState == 'X') xCount++;
+            }
+            if (xCount == 100){
+                xCut = i;
+                break;
+            }
+            xCount = 0;
+        }
         realMap = new MapCell[yCut][xCut];
         //map 복사
         for (int i =0; i< yCut; i++){
             for ( int j =0; j < xCut; j++){
-                realMap[j][i] = map[j][i];
+                realMap[i][j] = map[i][j];
             }
         }
+    }
+
+    public int getxCut() {
+        return xCut;
+    }
+
+    public int getyCut() {
+        return yCut;
     }
 
     public MapCell[][] getMap(){
