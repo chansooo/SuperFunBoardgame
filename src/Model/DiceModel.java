@@ -8,7 +8,13 @@ public class DiceModel {
     }
 
     public int rollDice(){
-        this.DiceNum = (int)(Math.random()*6);
+        while(true){
+            this.DiceNum = (int)(Math.random()*6);
+            if(this.DiceNum != 0){
+                break;
+            }
+        }
+
         return this.DiceNum;
     }
 }
