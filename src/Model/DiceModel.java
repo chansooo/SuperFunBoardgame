@@ -4,7 +4,7 @@ public class DiceModel {
     int DiceNum;
 
     public DiceModel(){
-
+        this.rollDice();
     }
 
     public int rollDice(){
