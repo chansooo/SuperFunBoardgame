@@ -17,7 +17,7 @@ public class PlayerModelTest {
         MapModel a = new MapModel(1);
         MapCellModel[][] map = a.getMap();
         PositionModel startpos = new PositionModel(1,0);
-        PlayerModel p = new PlayerModel(startpos, map);
+        PlayerModel p = new PlayerModel(startpos);
     }
 
     @Test
@@ -26,7 +26,7 @@ public class PlayerModelTest {
         MapModel a = new MapModel(0);
         MapCellModel[][] map = a.getMap();
         PositionModel startpos = a.getStartPos();
-        PlayerModel p = new PlayerModel(startpos, map);
+        PlayerModel p = new PlayerModel(startpos);
         PositionModel temp = p.stayPlayer();
         assertEquals(temp.dx, startpos.dx);
         assertEquals(temp.dy, startpos.dy);
@@ -40,8 +40,8 @@ public class PlayerModelTest {
         MapModel a = new MapModel(0);
         MapCellModel[][] map = a.getMap();
         PositionModel startpos = a.getStartPos();
-        PlayerModel p = new PlayerModel(startpos, map);
-        PositionModel temp = p.movePlayer("RLR", 3, false);
+        PlayerModel p = new PlayerModel(startpos);
+        PositionModel temp = p.movePlayer("RLR", 3, map,false);
         assertEquals(temp.dx, 1);
         assertEquals(temp.dx, 1);
     }
@@ -52,8 +52,8 @@ public class PlayerModelTest {
         MapModel a = new MapModel(0);
         MapCellModel[][] map = a.getMap();
         PositionModel startpos = a.getStartPos();
-        PlayerModel p = new PlayerModel(startpos, map);
-        PositionModel temp = p.movePlayer("R", 1, true);
+        PlayerModel p = new PlayerModel(startpos);
+        PositionModel temp = p.movePlayer("R", 1, map,  true);
         assertEquals(temp.dx, 1);
         //assertEquals(temp.dy, startpos.dy);
     }
@@ -64,8 +64,8 @@ public class PlayerModelTest {
         MapModel a = new MapModel(1);
         MapCellModel[][] map = a.getMap();
         PositionModel startpos = a.getStartPos();
-        PlayerModel p = new PlayerModel(startpos, map);
-        PositionModel temp = p.movePlayer("RRDRR", 5, false);
+        PlayerModel p = new PlayerModel(startpos);
+        PositionModel temp = p.movePlayer("RRDRR", 5, map, false);
         assertEquals(temp.dx, 4);
         assertEquals(temp.dy, 1);
     }
@@ -76,12 +76,12 @@ public class PlayerModelTest {
         MapModel a = new MapModel(1);
         MapCellModel[][] map = a.getMap();
         PositionModel startpos = a.getStartPos();
-        PlayerModel p = new PlayerModel(startpos, map);
+        PlayerModel p = new PlayerModel(startpos);
         PositionModel temp = new PositionModel(1,0);
         try{
-            temp = p.movePlayer("RRR", 3, false);
+            temp = p.movePlayer("RRR", 3, map, false);
         } catch (Exception e){
-            assertEquals(p.getPosition(), startpos);
+            assertEquals(p.getPosition().dx, startpos.dx);
         }
 
     }

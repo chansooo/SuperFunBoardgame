@@ -1,6 +1,5 @@
-import Model.MapCell;
+import Model.MapCellModel;
 import Model.MapModel;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
@@ -21,20 +20,20 @@ public class MapModelTest {
         String testMap[] = new String[]{
                 "XXXXCCHXXXXXX",
                 "TCCXPXCXXXXXX",
-                "XXBXbXCXXXXXX",
+                "XXB-bXCXXXXXX",
                 "XXSXCXCXCCHXX",
-                "XXCXCXBXbXCXX",
+                "XXCXCXB-bXCXX",
                 "XXCXCXCXCXCXE",
-                "XXCXBXbXCXCXC",
+                "XXCXB-bXCXCXC",
                 "XXCCHXCXCXPXC",
-                "XXXXXXSXCXBXb",
-                "XXXXXXPXBXbXC",
+                "XXXXXXSXCXB-b",
+                "XXXXXXPXB-bXC",
                 "XXXXXXCXCXCXC",
                 "XXXXXXCXHXHXP",
                 "XXXXXXCCCXCCS"
         };
         MapModel a = new MapModel(0);
-        MapCell[][] b = a.getMap();
+        MapCellModel[][] b = a.getMap();
         int xCut = a.getxCut();
         int yCut = a.getyCut();
         for(int i=0;i< yCut;i++){
@@ -56,15 +55,15 @@ public class MapModelTest {
     void getMapTest1() throws IOException {
         String testMap[] = new String[]{
                 "TCCXE",
-                "XXBXb",
+                "XXB-b",
                 "XXSXC",
-                "XXBXb",
+                "XXB-b",
                 "XXCXC",
                 "XXCXC",
                 "XXCCH"
         };
         MapModel a = new MapModel(1);
-        MapCell[][] b = a.getMap();
+        MapCellModel[][] b = a.getMap();
         int xCut = a.getxCut();
         int yCut = a.getyCut();
         for(int i=0;i< yCut;i++){
