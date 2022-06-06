@@ -8,13 +8,13 @@ public class PlayerModel {
     private int bridgePenalty =0;
     private int score = 0;
     private int canMoveNum =0;
-    MapCellModel[][] map;
+//    MapCellModel[][] map;
     //TODO: map을 프로퍼티로 두지 말고 파라미터로 받아서 해결.
     //
-    public PlayerModel(PositionModel startPositionModel, MapCellModel[][] map){
+    public PlayerModel(PositionModel startPositionModel){
         this.positionModel.dy = startPositionModel.dy;
         this.positionModel.dx = startPositionModel.dx;
-        this.map = map;
+  //      this.map = map;
         bridgePenalty = 0;
     }
 
@@ -33,7 +33,7 @@ public class PlayerModel {
         return positionModel;
     }
 
-    public PositionModel movePlayer(String moveDirectionString, int curDiceNum, boolean hasFinisher) throws Exception {
+    public PositionModel movePlayer(String moveDirectionString, int curDiceNum,MapCellModel[][] map, boolean hasFinisher) throws Exception {
         if(!this.moveValidateCheck()){
             return positionModel;
         }
@@ -48,9 +48,9 @@ public class PlayerModel {
         // 한칸한칸 움직일 수 있는지 없는지 확인
         String tempDirectionString = moveDirectionString;
         if (hasFinisher){
-           this.movePlayerWithFinisher(tempDirectionString, moveDirectionString);
+           this.movePlayerWithFinisher(tempDirectionString, moveDirectionString, map);
         } else {
-            this.movePlayerNoFinisher(tempDirectionString, moveDirectionString);
+            this.movePlayerNoFinisher(tempDirectionString, moveDirectionString, map);
         }
 
         return positionModel;
@@ -58,42 +58,42 @@ public class PlayerModel {
     }
 
     //끝난 player 없을 때
-    private void movePlayerNoFinisher(String tempDirectionString, String moveDirectionString) throws Exception {
+    private void movePlayerNoFinisher(String tempDirectionString, String moveDirectionString, MapCellModel[][] map) throws Exception {
         int count =0;
         Stack s = new Stack();
         //한 칸씩 고려
         while(!tempDirectionString.equals("")){
             //끝났는지 체크
             //움직여야 하는 칸으로 position 변경
-            if( tempDirectionString.charAt(0) == this.map[positionModel.dy][positionModel.dx].preDirection){
-                if(this.map[positionModel.dy][positionModel.dx].preDirection == 'U'){
+            if( tempDirectionString.charAt(0) == map[positionModel.dy][positionModel.dx].preDirection){
+                if(map[positionModel.dy][positionModel.dx].preDirection == 'U'){
                     s.push('U');
                     positionModel.dy--;
-                } else if(this.map[positionModel.dy][positionModel.dx].preDirection == 'D'){
+                } else if(map[positionModel.dy][positionModel.dx].preDirection == 'D'){
                     s.push('D');
                     positionModel.dy++;
-                } else if (this.map[positionModel.dy][positionModel.dx].preDirection == 'L'){
+                } else if (map[positionModel.dy][positionModel.dx].preDirection == 'L'){
                     s.push('L');
                     positionModel.dx--;
-                } else if (this.map[positionModel.dy][positionModel.dx].preDirection == 'R'){
+                } else if (map[positionModel.dy][positionModel.dx].preDirection == 'R'){
                     s.push('R');
                     positionModel.dx++;
                 }
-            }else if(tempDirectionString.charAt(0) == this.map[positionModel.dy][positionModel.dx].nextDirection){
-                if(this.map[positionModel.dy][positionModel.dx].nextDirection == 'U'){
+            }else if(tempDirectionString.charAt(0) == map[positionModel.dy][positionModel.dx].nextDirection){
+                if(map[positionModel.dy][positionModel.dx].nextDirection == 'U'){
                     s.push('U');
                     positionModel.dy--;
-                } else if(this.map[positionModel.dy][positionModel.dx].nextDirection == 'D'){
+                } else if(map[positionModel.dy][positionModel.dx].nextDirection == 'D'){
                     s.push('D');
                     positionModel.dy++;
-                } else if (this.map[positionModel.dy][positionModel.dx].nextDirection == 'L'){
+                } else if (map[positionModel.dy][positionModel.dx].nextDirection == 'L'){
                     s.push('L');
                     positionModel.dx--;
-                } else if (this.map[positionModel.dy][positionModel.dx].nextDirection == 'R'){
+                } else if (map[positionModel.dy][positionModel.dx].nextDirection == 'R'){
                     s.push('R');
                     positionModel.dx++;
                 }
-            } else if(this.map[positionModel.dy][positionModel.dx].cellState == 'B'){ //Bridge 처리
+            } else if(map[positionModel.dy][positionModel.dx].cellState == 'B'){ //Bridge 처리
                 for( int i=1;(moveDirectionString.length() - count - i) >= 0 ; i++){
                     if(map[positionModel.dy][positionModel.dx+i].cellState == 'b'){
                        positionModel.dx += i;
@@ -137,7 +137,7 @@ public class PlayerModel {
             }
 
             //끝난 것 처리
-            if(this.checkEnd()){
+            if(this.checkEnd(map)){
                 break;
             }
 
@@ -149,24 +149,24 @@ public class PlayerModel {
     }
 
     //끝난 player가 있을 때
-    private void movePlayerWithFinisher(String tempDirectionString, String moveDirectionString) throws Exception {
+    private void movePlayerWithFinisher(String tempDirectionString, String moveDirectionString, MapCellModel[][] map) throws Exception {
         int count =0;
         Stack s = new Stack();
         //한 칸씩 고려
         while(!tempDirectionString.equals("")){
             //끝났는지 체크
             //움직여야 하는 칸으로 position 변경
-            if(tempDirectionString.charAt(0) == this.map[positionModel.dy][positionModel.dx].nextDirection){
-                if(this.map[positionModel.dy][positionModel.dx].nextDirection == 'U'){
+            if(tempDirectionString.charAt(0) == map[positionModel.dy][positionModel.dx].nextDirection){
+                if(map[positionModel.dy][positionModel.dx].nextDirection == 'U'){
                     positionModel.dy++;
-                } else if(this.map[positionModel.dy][positionModel.dx].nextDirection == 'D'){
+                } else if(map[positionModel.dy][positionModel.dx].nextDirection == 'D'){
                     positionModel.dy--;
-                } else if (this.map[positionModel.dy][positionModel.dx].nextDirection == 'L'){
+                } else if (map[positionModel.dy][positionModel.dx].nextDirection == 'L'){
                     positionModel.dx--;
-                } else if (this.map[positionModel.dy][positionModel.dx].nextDirection == 'R'){
+                } else if (map[positionModel.dy][positionModel.dx].nextDirection == 'R'){
                     positionModel.dx++;
                 }
-            } else if(this.map[positionModel.dy][positionModel.dx].cellState == 'B'){ //Bridge 처리
+            } else if(map[positionModel.dy][positionModel.dx].cellState == 'B'){ //Bridge 처리
                 for( int i=1;(moveDirectionString.length() - count - i) >= 0 ; i++){
                     if(map[positionModel.dy][positionModel.dx+i].cellState == 'b'){
                         positionModel.dx += i;
@@ -208,7 +208,7 @@ public class PlayerModel {
                 throw new Exception("경로를 다시 입력하세요");
             }
             //끝난 것 처리
-            if(this.checkEnd()){
+            if(this.checkEnd(map)){
                 break;
             }
             //아이템 먹은 것 처리
@@ -218,7 +218,7 @@ public class PlayerModel {
     }
 
 
-    private boolean checkEnd(){
+    private boolean checkEnd(MapCellModel[][] map){
         if(map[positionModel.dy][positionModel.dx].cellState == 'E') {
             this.isEnd = true;
             return true;
