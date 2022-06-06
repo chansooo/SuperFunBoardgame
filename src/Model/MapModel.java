@@ -8,29 +8,30 @@ public class MapModel {
     private File f;
     private int mapNum;
     private final String[] mapList = {"default.map", "another.map"};
-    private MapCell[][] map;
-    private Position startPos = new Position(0, 0);
+    private MapCellModel[][] map;
+    private PositionModel startPos = new PositionModel(0, 0);
 
-    private MapCell[][] realMap;
+    private MapCellModel[][] realMap;
     public int xCut = 100;
     public int yCut = 100;
 
     public MapModel(int mapNum) throws IOException {
-        map = new MapCell[100][100];
+        map = new MapCellModel[100][100];
 
         this.mapNum = mapNum;
         f = new File("./src/data/"+mapList[mapNum]);
         this.calculateMap();
         this.readMap();
         this.stabilizaMap();
+        this.makeBridge();
     }
 
     private void calculateMap() throws IOException {
         BufferedReader br1 = new BufferedReader(new FileReader(f));
         //MARK: data로 경로 확인하고 startpoint 맞춰주기
         String curMapCell;
-        Position minPosition = new Position(0, 0);
-        Position tempPosition = new Position(0,0);
+        PositionModel minPositionModel = new PositionModel(0, 0);
+        PositionModel tempPositionModel = new PositionModel(0,0);
         for(int step = 0; (curMapCell = br1.readLine())!=null ; step++){
             char temp;
             if (curMapCell.charAt(0) == 'E'){
@@ -42,28 +43,28 @@ public class MapModel {
                     temp = curMapCell.charAt(4);
                 }
                 if(temp == 'U'){
-                    tempPosition.dy -= 1;
+                    tempPositionModel.dy -= 1;
                 } else if(temp == 'D'){
-                    tempPosition.dy += 1;
+                    tempPositionModel.dy += 1;
                 } else if (temp == 'L'){
-                    tempPosition.dx -= 1;
+                    tempPositionModel.dx -= 1;
                 } else if (temp == 'R'){
-                    tempPosition.dx += 1;
+                    tempPositionModel.dx += 1;
                 }else{
                     System.out.println("ERROR: invalid map data");
                 }
             }
             //역대 가장 작은 x,y값을 저장
-            minPosition.dx = Math.min(tempPosition.dx, minPosition.dx);
-            minPosition.dy = Math.min(tempPosition.dy, minPosition.dy);
+            minPositionModel.dx = Math.min(tempPositionModel.dx, minPositionModel.dx);
+            minPositionModel.dy = Math.min(tempPositionModel.dy, minPositionModel.dy);
         }
         br1.close();
         //최소값이 음수가 나오면 그만큼 더해주기
-        if(minPosition.dx < 0) {
-            this.startPos.dx = this.startPos.dx - minPosition.dx ;
+        if(minPositionModel.dx < 0) {
+            this.startPos.dx = this.startPos.dx - minPositionModel.dx ;
         }
-        if(minPosition.dy < 0){
-            this.startPos.dy = this.startPos.dy - minPosition.dy ;
+        if(minPositionModel.dy < 0){
+            this.startPos.dy = this.startPos.dy - minPositionModel.dy ;
         }
     }
 
@@ -71,40 +72,40 @@ public class MapModel {
         for (int i=0;i<100;i++){
             for(int j =0; j<100;j++){
                 if(map[i][j] == null){
-                    map[i][j] = new MapCell();
+                    map[i][j] = new MapCellModel();
                 }
                 map[i][j].cellState = 'X';
                 map[i][j].index = -1;
             }
         }
         BufferedReader br2 = new BufferedReader(new FileReader(f));
-        Position curMapPosition = new Position(this.startPos.dy,this.startPos.dx);
+        PositionModel curMapPositionModel = new PositionModel(this.startPos.dy,this.startPos.dx);
         String curMapString;
         for(int step = 0; (curMapString = br2.readLine())!=null ; step++){
             if (curMapString.charAt(0) == 'E'){
-                this.map[curMapPosition.dy][curMapPosition.dx].cellState = curMapString.charAt(0);
+                this.map[curMapPositionModel.dy][curMapPositionModel.dx].cellState = curMapString.charAt(0);
                 break;
             }
             if(step == 0){ //시작점 따로 처리
-                this.map[curMapPosition.dy][curMapPosition.dx].cellState = 'T'; //take up 의미로 T를 시작점으로. S가 start, saw 두개기 때문에..
-                this.map[curMapPosition.dy][curMapPosition.dx].nextDirection = curMapString.charAt(2);
-                this.map[curMapPosition.dy][curMapPosition.dx].preDirection = 'M';
-                this.map[curMapPosition.dy][curMapPosition.dx].index = step;
+                this.map[curMapPositionModel.dy][curMapPositionModel.dx].cellState = 'T'; //take up 의미로 T를 시작점으로. S가 start, saw 두개기 때문에..
+                this.map[curMapPositionModel.dy][curMapPositionModel.dx].nextDirection = curMapString.charAt(2);
+                this.map[curMapPositionModel.dy][curMapPositionModel.dx].preDirection = 'M';
+                this.map[curMapPositionModel.dy][curMapPositionModel.dx].index = step;
             }else{
-                this.map[curMapPosition.dy][curMapPosition.dx].cellState = curMapString.charAt(0);
-                this.map[curMapPosition.dy][curMapPosition.dx].preDirection = curMapString.charAt(2);
-                this.map[curMapPosition.dy][curMapPosition.dx].nextDirection = curMapString.charAt(4);
-                this.map[curMapPosition.dy][curMapPosition.dx].index = step;
+                this.map[curMapPositionModel.dy][curMapPositionModel.dx].cellState = curMapString.charAt(0);
+                this.map[curMapPositionModel.dy][curMapPositionModel.dx].preDirection = curMapString.charAt(2);
+                this.map[curMapPositionModel.dy][curMapPositionModel.dx].nextDirection = curMapString.charAt(4);
+                this.map[curMapPositionModel.dy][curMapPositionModel.dx].index = step;
             }
-            char next = this.map[curMapPosition.dy][curMapPosition.dx].nextDirection;
+            char next = this.map[curMapPositionModel.dy][curMapPositionModel.dx].nextDirection;
             if(next == 'U'){
-                curMapPosition.dy--;
+                curMapPositionModel.dy--;
             } else if(next == 'D'){
-                curMapPosition.dy++;
+                curMapPositionModel.dy++;
             } else if (next == 'L'){
-                curMapPosition.dx--;
+                curMapPositionModel.dx--;
             } else if (next == 'R'){
-                curMapPosition.dx++;
+                curMapPositionModel.dx++;
             }else {
                 System.out.println("ERROR: invalid map data");
             }
@@ -139,11 +140,33 @@ public class MapModel {
             }
             xCount = 0;
         }
-        realMap = new MapCell[yCut][xCut];
+        realMap = new MapCellModel[yCut][xCut];
         //map 복사
         for (int i =0; i< yCut; i++){
             for ( int j =0; j < xCut; j++){
                 realMap[i][j] = map[i][j];
+            }
+        }
+    }
+
+    private void makeBridge(){
+        for (int i =0; i< yCut; i++){
+            for ( int j =0; j < xCut; j++){
+                if(realMap[i][j].cellState == 'B'){
+                    int k =1;
+                    while(true){
+                        if(realMap[i][j+k].cellState == 'b'){
+                            //realmap[i][j+1] ~ [i][j+k-1]까지 '-'로 바꾸기
+                            int p = 1;
+                            while(p != k){
+                                realMap[i][j+p].cellState = '-';
+                                p++;
+                            }
+                            break;
+                        }
+                        k++;
+                    }
+                }
             }
         }
     }
@@ -156,11 +179,11 @@ public class MapModel {
         return yCut;
     }
 
-    public MapCell[][] getMap(){
+    public MapCellModel[][] getMap(){
         return realMap;
     }
 
-    public Position getStartPos(){
+    public PositionModel getStartPos(){
         return startPos;
     }
 
