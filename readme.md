@@ -138,8 +138,7 @@ stay를 할 경우 카드를 반납하고 turn을 종료한다.
 ## Design Class Diagram
 
 Design Class Diagram은 MVC를 적용을 염두하고 설계를 진행했고, test 또한 고려하였다.
-
-<img width="1180" alt="Screen_Shot_2022-06-09_at_1 41 54_PM" src="https://user-images.githubusercontent.com/89574881/172787928-52a96af7-82ee-4250-a44a-b46ca5c6d411.png">
+![Untitled](https://user-images.githubusercontent.com/89574881/172788101-1823092e-e5b0-4029-a433-1fce7c1b6c7d.png)
 
 MVC에 따라 크게 3가지 + test 총 4종류로 클래스를 나누었다.
 
@@ -205,8 +204,10 @@ Model은 Controller와 View를 알 지 못하고, 내부에서 로직을 진행�
 
 ## Sequence Diagram
 
+<img width="1180" alt="Screen_Shot_2022-06-09_at_1 41 54_PM" src="https://user-images.githubusercontent.com/89574881/172787928-52a96af7-82ee-4250-a44a-b46ca5c6d411.png">
+
 <img width="1181" alt="Screen_Shot_2022-06-09_at_1 42 11_PM" src="https://user-images.githubusercontent.com/89574881/172787937-b895f78f-e5ec-4eb5-a332-7b9fea6fa7e8.png">
-![Untitled](https://user-images.githubusercontent.com/89574881/172788101-1823092e-e5b0-4029-a433-1fce7c1b6c7d.png)
+
 프로그램의 순서를 명확하게 파악하기 위해서 sequence diagram을 작성하였다.
 
 main에서 GUIcontroller 또는 CLIController를 선택하고, Controller가 View클래스와 Model클래스를 생성한다.
