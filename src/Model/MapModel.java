@@ -7,7 +7,7 @@ import java.io.*;
 public class MapModel {
     private File f;
     private int mapNum;
-    private final String[] mapList = {"default.map", "another.map"};
+    private String[] mapList = {"default.map", "another.map"};
     private MapCellModel[][] map;
     private PositionModel startPos = new PositionModel(0, 0);
 
@@ -19,12 +19,34 @@ public class MapModel {
         map = new MapCellModel[100][100];
 
         this.mapNum = mapNum;
-        f = new File("./src/data/"+mapList[mapNum]);
+
+        if(mapNum >= 2 ){
+            //jar 파일로 실행할 때
+            f = new File("./data/"+(mapNum+1)+".map");
+            //코드를 바로 실행할 때
+            //f = new File("./src/data/"+(mapNum+1)+".map");
+        } else{
+            //jar 파일로 실행할 때
+            f = new File("./data/"+mapList[mapNum]);
+            //코드를 바로 실행할 때
+            //f = new File("./src/data/"+mapList[mapNum]);
+        }
         this.calculateMap();
         this.readMap();
         this.stabilizaMap();
         this.makeBridge();
     }
+
+//    public MapModel(String mapNum) throws IOException{
+//        map = new MapCellModel[100][100];
+//
+//        this.mapNum = mapNum;
+//        f = new File("../data/"+mapList[mapNum]);
+//        this.calculateMap();
+//        this.readMap();
+//        this.stabilizaMap();
+//        this.makeBridge();
+//    }
 
     private void calculateMap() throws IOException {
         BufferedReader br1 = new BufferedReader(new FileReader(f));
