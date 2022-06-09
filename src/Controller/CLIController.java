@@ -34,14 +34,15 @@ public class CLIController {
         int curPlayerNum = 0;
         while(true){
             curPlayerNum = (turn % playerCount);
-            //TODO: player 지나간 trace가 그대로 남는 것 없애기
+            if(rule.players[curPlayerNum].isEnd){
+                turn++;
+                continue;
+            }
             //맵 띄우기
             drawMap();
             //player 정보 띄우기
             drawPlayerInfo();
 
-            //TODO: player2를 올렸는데도 showcurplayer가 player1로 표시되고
-            // map에도 1로 표시됨
             //현재 player 띄우기
             cliView.showCurPlayer(curPlayerNum);
 
@@ -62,6 +63,7 @@ public class CLIController {
     public void drawMap(){
         MapCellModel[][] curMap = rule.getMap();
         //this.curMap = rule.getMap();
+
         for(int i=0; i<rule.mapModel.yCut; i++){
             for(int j=0; j<rule.mapModel.xCut; j++){
                 if(curMap[i][j].cellState == 'T'){
@@ -74,14 +76,12 @@ public class CLIController {
         }
         // player 띄우기
         for(int i=0; i<playerCount; i++){
-            PositionModel temp = rule.players[i].getPosition();
-            //PositionModel temp = rule.getPlayerPosition(i);
+            if(!rule.players[i].isEnd){
+                PositionModel temp = rule.players[i].getPosition();
+                curMap[temp.dy][temp.dx].cellState = (char) ('1'+i);
+            }
 
-            curMap[temp.dy][temp.dx].cellState = (char) ('1'+i);
-            System.out.println("player" + (i+1) + temp.dx );
-            System.out.println("player" + (i+1) + temp.dy );
         }
-        //cliView.showMap(this.curMap, rule.mapModel.yCut, rule.mapModel.xCut);
         cliView.showMap(curMap, rule.mapModel.yCut, rule.mapModel.xCut);
     }
 
@@ -110,7 +110,6 @@ public class CLIController {
         int diceNum = 0;
         int moveCount = 0;
         try{
-            System.out.println("move에서 curplayer: " + curPlayer);
             //주사위 숫자, move 띄워주기
             diceNum = rule.diceModel.rollDice();
             moveCount = diceNum - rule.players[curPlayer].getBridgePenalty();
@@ -121,7 +120,6 @@ public class CLIController {
             rule.integratedMove(curPlayer, command, diceNum);
         } catch (Exception e){
             System.out.println("command를 정확히 입력하세요.");
-            //TODO: 위의 dicenum을 유지하면서 진행해줘야한다.
             cliView.showPlayerMoveInfo(diceNum, moveCount);
             // Command 받기
             String command = cliView.receiveCommand();
@@ -135,6 +133,7 @@ public class CLIController {
 
     //move stay 중 stay
     public void stay(int curPlayer){
+        rule.players[curPlayer].stayPlayer();
         cliView.showStay();
     }
 
