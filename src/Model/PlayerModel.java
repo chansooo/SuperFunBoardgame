@@ -46,6 +46,7 @@ public class PlayerModel {
             throw new Exception("ERROR: 갈 수 있는 횟수에 맞게 입력하세요.");
         }
         // 한칸한칸 움직일 수 있는지 없는지 확인
+        moveDirectionString = moveDirectionString.toUpperCase();
         String tempDirectionString = moveDirectionString;
         if (hasFinisher){
            this.movePlayerWithFinisher(tempDirectionString, moveDirectionString, map);
@@ -59,6 +60,7 @@ public class PlayerModel {
 
     //끝난 player 없을 때
     private void movePlayerNoFinisher(String tempDirectionString, String moveDirectionString, MapCellModel[][] map) throws Exception {
+
         int count =0;
         Stack s = new Stack();
         //한 칸씩 고려
