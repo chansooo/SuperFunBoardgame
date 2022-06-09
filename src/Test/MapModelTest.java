@@ -66,12 +66,7 @@ public class MapModelTest {
         MapCellModel[][] b = a.getMap();
         int xCut = a.getxCut();
         int yCut = a.getyCut();
-        for(int i=0;i< yCut;i++){
-            for(int j =0; j<xCut;j++){
-                System.out.print(b[i][j].cellState);
-            }
-            System.out.println();
-        }
+
         for(int i=0;i<yCut;i++){
             for(int j=0; j<xCut;j++){
                 assertEquals(testMap[i].charAt(j), b[i][j].cellState);
