@@ -1,4 +1,4 @@
-# 소프트웨어공학 프로젝트
+# SuperFunBoardGame
 
 ## 프로젝트 이해
 
