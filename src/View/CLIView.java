@@ -18,6 +18,7 @@ public class CLIView {
 
     public int getMapNum(){
         System.out.println("Map 선택 (1 ~ 2) :");
+        System.out.println("(다른 맵을 원하면 숫자.map으로 이름을 변경하고 숫자를 입력하세요.)");
         return (sc.nextInt()-1);
     }
 
@@ -48,7 +49,8 @@ public class CLIView {
     }
 
     public void showEndGame(int winner){
-        System.out.println("승자: " + winner);
+        winner++;
+        System.out.println("승자: player" + winner);
         System.out.println("게임이 끝났습니다.");
 
     }
