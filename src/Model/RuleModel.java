@@ -60,6 +60,10 @@ public class RuleModel {
                 return true;
             }
         }
+        for(int i=0; i<playerCount;i++){
+            int temp = i+1;
+            System.out.println("player" + temp+"의 점수: " + players[i].getScore());
+        }
         return false;
     }
 
@@ -106,6 +110,8 @@ public class RuleModel {
         }
         return returnMap;
     }
+
+    //TODO: 점수 전부 띄워주는
 
 
     public PositionModel getPlayerPosition(int playerNumber){
