@@ -37,8 +37,6 @@ public class RuleModel {
     }
 
     public void integratedMove(int curPlayer, String command, int diceNum) throws Exception {
-        //TODO: 지우기
-        System.out.println("move player is " + curPlayer);
         PositionModel tempPosition = players[curPlayer].movePlayer(command, diceNum,this.map, players[curPlayer].isEnd);
         checkItem(tempPosition, curPlayer);
         addEndPlayerScore(curPlayer);
@@ -111,7 +109,6 @@ public class RuleModel {
         return returnMap;
     }
 
-    //TODO: 점수 전부 띄워주는
 
 
     public PositionModel getPlayerPosition(int playerNumber){
