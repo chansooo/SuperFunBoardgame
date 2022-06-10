@@ -200,7 +200,23 @@ Model은 Controller와 View를 알 지 못하고, 내부에서 로직을 진행�
 
 테스트는 모든 것을 하지 않고, 로직이 들어있는 Model을 대상으로 진행했다.
 
-수업에서 배운 JUnit을 사용해서 내가 원하는 값이 나왔는지, 원하는 오류가 나왔는지 비교를 해보며 unit test를 진행하도록 설계했다.
+JUnit을 사용해서 내가 원하는 값이 나왔는지, 원하는 오류가 나왔는지 비교를 해보며 unit test를 진행하도록 설계했다.
+
+- PlayerModelTest
+    
+    <img width="420" alt="player" src="https://user-images.githubusercontent.com/89574881/173009789-bc76d8c6-e5c6-4545-97a1-a3c4739629ce.png">
+    
+- MapModelTest
+    
+    <img width="397" alt="map" src="https://user-images.githubusercontent.com/89574881/173009828-59888a0c-0bbd-4e2a-8527-08357b1e1a7e.png">
+    
+- DiceModelTest
+    
+    <img width="1125" alt="dice" src="https://user-images.githubusercontent.com/89574881/173009851-46058e6c-4ae4-464e-b198-3387737f09f0.png">
+    
+- RuleModelTest
+    
+    <img width="413" alt="rule" src="https://user-images.githubusercontent.com/89574881/173009883-f388a974-672f-4c6b-a3a7-e352a6cef8d5.png">
 
 ## Sequence Diagram
 
